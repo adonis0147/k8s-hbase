@@ -12,9 +12,7 @@ FROM ubuntu:latest
 
 ARG PASSWORD
 
-RUN useradd hadoop -m -d /home/hadoop -s /bin/bash -p "${PASSWORD}"
-
-USER hadoop
+RUN mkdir -p /home/hadoop
 
 WORKDIR /home/hadoop
 

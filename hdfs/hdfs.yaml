@@ -1,0 +1,61 @@
+# Journalnode
+apiVersion: v1
+kind: Service
+metadata:
+  name: journalnode
+  labels:
+    app: journalnode
+spec:
+  clusterIP: None
+  selector:
+    app: journalnode
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jn
+spec:
+  serviceName: journalnode
+  replicas: 3
+  selector:
+    matchLabels:
+      app: journalnode
+  template:
+    metadata:
+      labels:
+        app: journalnode
+    spec:
+      containers:
+        - name: jn
+          image: hdfs:latest
+          imagePullPolicy: Never
+          command:
+            - hdfs
+            - --config
+            - /home/hadoop/conf
+            - journalnode
+          volumeMounts:
+            - name: hdfs-conf
+              mountPath: /home/hadoop/conf
+            - name: journalnode-data
+              mountPath: /data/journal/node/local/data
+      volumes:
+        - name: hdfs-conf
+          configMap:
+            name: hdfs-conf
+            items:
+              - key: hdfs-site.xml
+                path: hdfs-site.xml
+              - key: core-site.xml
+                path: core-site.xml
+              - key: slaves
+                path: slaves
+  volumeClaimTemplates:
+    - metadata:
+        name: journalnode-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1G
