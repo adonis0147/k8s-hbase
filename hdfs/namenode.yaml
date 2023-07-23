@@ -1,0 +1,87 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: namenode
+  labels:
+    app: namenode
+spec:
+  clusterIP: None
+  selector:
+    app: namenode
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: namenode-entrypoint
+data:
+  entrypoint.sh: |
+    #!/usr/bin/env bash
+
+    if [[ ! -f /data/hadoop ]]; then
+      if [[ "$(hostname -f)" =~ nn-0.* ]]; then
+        hdfs namenode -format
+      else
+        hdfs namenode -bootstrapStandby
+      fi
+    fi
+
+    hdfs namenode
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nn
+spec:
+  serviceName: namenode
+  replicas: 2
+  selector:
+    matchLabels:
+      app: namenode
+  template:
+    metadata:
+      labels:
+        app: namenode
+    spec:
+      containers:
+        - name: nn
+          image: hdfs:latest
+          imagePullPolicy: Never
+          env:
+            - name: HADOOP_CONF_DIR
+              value: /home/hadoop/conf
+          command:
+            - bash
+            - /home/hadoop/scripts/entrypoint.sh
+          volumeMounts:
+            - name: hdfs-conf
+              mountPath: /home/hadoop/conf
+            - name: namenode-data
+              mountPath: /data
+            - name: entrypoint
+              mountPath: /home/hadoop/scripts
+      volumes:
+        - name: hdfs-conf
+          configMap:
+            name: hdfs-conf
+            items:
+              - key: hdfs-site.xml
+                path: hdfs-site.xml
+              - key: core-site.xml
+                path: core-site.xml
+              - key: slaves
+                path: slaves
+        - name: entrypoint
+          configMap:
+            name: namenode-entrypoint
+            items:
+                - key: entrypoint.sh
+                  path: entrypoint.sh
+  volumeClaimTemplates:
+    - metadata:
+        name: namenode-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 512M

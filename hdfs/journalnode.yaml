@@ -1,4 +1,3 @@
-# Journalnode
 apiVersion: v1
 kind: Service
 metadata:
@@ -29,16 +28,17 @@ spec:
         - name: jn
           image: hdfs:latest
           imagePullPolicy: Never
+          env:
+            - name: HADOOP_CONF_DIR
+              value: /home/hadoop/conf
           command:
             - hdfs
-            - --config
-            - /home/hadoop/conf
             - journalnode
           volumeMounts:
             - name: hdfs-conf
               mountPath: /home/hadoop/conf
             - name: journalnode-data
-              mountPath: /data/journal/node/local/data
+              mountPath: /data
       volumes:
         - name: hdfs-conf
           configMap:
@@ -58,4 +58,4 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 1G
+            storage: 512M
