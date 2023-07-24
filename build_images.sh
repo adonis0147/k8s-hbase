@@ -20,7 +20,18 @@ function build_hdfs() {
 	ln -f "${PROJECT_PATH}/packages"/jdk-*.tar.gz .
 	ln -f "${PROJECT_PATH}/packages"/hadoop-*.tar.gz .
 
-	docker build --build-arg PASSWORD="$(openssl passwd -1 hadoop)" -t hdfs .
+	docker build -t hdfs .
+
+	popd &>/dev/null
+}
+
+function build_zookeeper() {
+	pushd "${PROJECT_PATH}/zookeeper" &>/dev/null
+
+	ln -f "${PROJECT_PATH}/packages"/jdk-*.tar.gz .
+	ln -f "${PROJECT_PATH}/packages"/apache-zookeeper-*.tar.gz .
+
+	docker build -t zookeeper .
 
 	popd &>/dev/null
 }
@@ -28,6 +39,7 @@ function build_hdfs() {
 function main() {
 	download_packages
 	build_hdfs
+	build_zookeeper
 }
 
 main

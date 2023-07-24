@@ -33,6 +33,11 @@ else
 	declare -r HADOOP_SHA256SUM='e4bbf6b80ef604912f6b9bf6ca77323dee6028d08d38f36ca077df56de8a5d0d'
 fi
 
+# shellcheck disable=2034
+declare -r ZOOKEEPER_URL='https://dlcdn.apache.org/zookeeper/zookeeper-3.7.1/apache-zookeeper-3.7.1-bin.tar.gz'
+# shellcheck disable=2034
+declare -r ZOOKEEPER_SHA256SUM='dedf166f9a5fb12240041385a74ec81ce9de63f2a49454883027cf6acae202a5'
+
 function download() {
 	local package
 	package="$(echo "${1}" | awk '{print toupper($0)}')"
@@ -54,6 +59,7 @@ function main() {
 
 	download 'java'
 	download 'hadoop'
+	download 'zookeeper'
 
 	popd &>/dev/null
 }
