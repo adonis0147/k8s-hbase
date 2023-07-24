@@ -51,6 +51,8 @@ spec:
           env:
             - name: HADOOP_CONF_DIR
               value: /home/hadoop/conf
+            - name: HADOOP_ROOT_LOGGER
+              value: INFO,DRFA,console
           command:
             - bash
             - /home/hadoop/scripts/entrypoint.sh
@@ -72,6 +74,8 @@ spec:
                 path: core-site.xml
               - key: slaves
                 path: slaves
+              - key: log4j.properties
+                path: log4j.properties
         - name: entrypoint
           configMap:
             name: namenode-entrypoint
