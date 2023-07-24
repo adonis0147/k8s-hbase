@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: datanode
+  labels:
+    app: datanode
+spec:
+  clusterIP: None
+  selector:
+    app: datanode
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dn
+spec:
+  serviceName: datanode
+  replicas: 3
+  selector:
+    matchLabels:
+      app: datanode
+  template:
+    metadata:
+      labels:
+        app: datanode
+    spec:
+      containers:
+        - name: dn
+          image: hdfs:latest
+          imagePullPolicy: Never
+          env:
+            - name: HADOOP_CONF_DIR
+              value: /home/hadoop/conf
+          command:
+            - hdfs
+            - datanode
+          volumeMounts:
+            - name: hdfs-conf
+              mountPath: /home/hadoop/conf
+            - name: datanode-data
+              mountPath: /data
+      volumes:
+        - name: hdfs-conf
+          configMap:
+            name: hdfs-conf
+            items:
+              - key: hdfs-site.xml
+                path: hdfs-site.xml
+              - key: core-site.xml
+                path: core-site.xml
+              - key: slaves
+                path: slaves
+  volumeClaimTemplates:
+    - metadata:
+        name: datanode-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 512M
