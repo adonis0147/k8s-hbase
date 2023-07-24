@@ -7,23 +7,23 @@
 	</property>
 	<property>
 		<name>dfs.ha.namenodes.hbase-cluster</name>
-		<value>nn1,nn2</value>
+		<value>nn0,nn1</value>
+	</property>
+	<property>
+		<name>dfs.namenode.rpc-address.hbase-cluster.nn0</name>
+		<value>nn-0.namenode.default.svc.cluster.local:8020</value>
 	</property>
 	<property>
 		<name>dfs.namenode.rpc-address.hbase-cluster.nn1</name>
-		<value>nn-0.namenode:8020</value>
+		<value>nn-1.namenode.default.svc.cluster.local:8020</value>
 	</property>
 	<property>
-		<name>dfs.namenode.rpc-address.hbase-cluster.nn2</name>
-		<value>nn-1.namenode:8020</value>
+		<name>dfs.namenode.http-address.hbase-cluster.nn0</name>
+		<value>nn-0.namenode.default.svc.cluster.local:50070</value>
 	</property>
 	<property>
 		<name>dfs.namenode.http-address.hbase-cluster.nn1</name>
-		<value>nn-0.namenode:50070</value>
-	</property>
-	<property>
-		<name>dfs.namenode.http-address.hbase-cluster.nn2</name>
-		<value>nn-1.namenode:50070</value>
+		<value>nn-1.namenode.default.svc.cluster.local:50070</value>
 	</property>
 	<property>
 		<name>dfs.namenode.shared.edits.dir</name>

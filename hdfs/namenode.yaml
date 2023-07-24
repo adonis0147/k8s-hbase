@@ -17,6 +17,8 @@ data:
   entrypoint.sh: |
     #!/usr/bin/env bash
 
+    set -e
+
     if [[ ! -f /data/hadoop ]]; then
       if [[ "$(hostname -f)" =~ nn-0.* ]]; then
         hdfs namenode -format
