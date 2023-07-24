@@ -36,10 +36,22 @@ function build_zookeeper() {
 	popd &>/dev/null
 }
 
+function build_hbase() {
+	pushd "${PROJECT_PATH}/hbase" &>/dev/null
+
+	ln -f "${PROJECT_PATH}/packages"/jdk-*.tar.gz .
+	ln -f "${PROJECT_PATH}/packages"/hbase-*.tar.gz .
+
+	docker build -t hbase .
+
+	popd &>/dev/null
+}
+
 function main() {
 	download_packages
 	build_hdfs
 	build_zookeeper
+	build_hbase
 }
 
 main

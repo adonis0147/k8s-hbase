@@ -37,6 +37,10 @@ fi
 declare -r ZOOKEEPER_URL='https://dlcdn.apache.org/zookeeper/zookeeper-3.7.1/apache-zookeeper-3.7.1-bin.tar.gz'
 # shellcheck disable=2034
 declare -r ZOOKEEPER_SHA256SUM='dedf166f9a5fb12240041385a74ec81ce9de63f2a49454883027cf6acae202a5'
+# shellcheck disable=2034
+declare -r HBASE_URL='https://dlcdn.apache.org/hbase/2.5.5/hbase-2.5.5-bin.tar.gz'
+# shellcheck disable=2034
+declare -r HBASE_SHA256SUM='e67d717e96d17980f92d9afb948b9368d13fe2422a3b1f6e978e39b20d6d4df7'
 
 function download() {
 	local package
@@ -60,6 +64,7 @@ function main() {
 	download 'java'
 	download 'hadoop'
 	download 'zookeeper'
+	download 'hbase'
 
 	popd &>/dev/null
 }

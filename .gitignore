@@ -1,3 +1,4 @@
 hadoop-*.tar.gz
 jdk-*.tar.gz
 apache-zookeeper-*.tar.gz
+hbase-*.tar.gz
