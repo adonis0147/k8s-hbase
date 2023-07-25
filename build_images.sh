@@ -23,6 +23,8 @@ function build_hdfs() {
 	docker build -t hdfs .
 
 	popd &>/dev/null
+
+	minikube image load --alsologtostderr hdfs:latest
 }
 
 function build_zookeeper() {
@@ -34,6 +36,8 @@ function build_zookeeper() {
 	docker build -t zookeeper .
 
 	popd &>/dev/null
+
+	minikube image load --alsologtostderr zookeeper:latest
 }
 
 function build_hbase() {
@@ -45,13 +49,23 @@ function build_hbase() {
 	docker build -t hbase .
 
 	popd &>/dev/null
+
+	minikube image load --alsologtostderr hbase:latest
 }
 
 function main() {
 	download_packages
-	build_hdfs
-	build_zookeeper
-	build_hbase
+
+	if [[ "${#@}" == 0 ]]; then
+		build_hdfs
+		build_zookeeper
+		build_hbase
+	else
+		for package in "${@}"; do
+			local cmd="build_${package}"
+			"${cmd}"
+		done
+	fi
 }
 
-main
+main "${@}"
