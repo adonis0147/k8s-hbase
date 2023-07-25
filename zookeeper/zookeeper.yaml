@@ -28,8 +28,6 @@ data:
       echo "$((id + 1))" > /home/zookeeper/cluster-data/zk/data/myid
     fi
 
-    ln -snf /home/zookeeper/zookeeper-current/conf/log4j.properties /home/zookeeper/conf/
-
     zkServer.sh start-foreground
 ---
 apiVersion: apps/v1
@@ -52,8 +50,6 @@ spec:
           image: zookeeper:latest
           imagePullPolicy: Never
           env:
-            - name: ZOOCFGDIR
-              value: /home/zookeeper/conf
             - name: ZOO_LOG4J_PROP
               value: INFO,ROLLINGFILE,CONSOLE
           command:
@@ -61,7 +57,7 @@ spec:
             - /home/zookeeper/scripts/entrypoint.sh
           volumeMounts:
             - name: zookeeper-conf
-              mountPath: /home/zookeeper/conf/zoo.cfg
+              mountPath: /home/zookeeper/zookeeper-current/conf/zoo.cfg
               subPath: zoo.cfg
             - name: zookeeper-data
               mountPath: /home/zookeeper/cluster-data/zk/data

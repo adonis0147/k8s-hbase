@@ -49,8 +49,6 @@ spec:
           image: hdfs:latest
           imagePullPolicy: Never
           env:
-            - name: HADOOP_CONF_DIR
-              value: /home/hadoop/conf
             - name: HADOOP_ROOT_LOGGER
               value: INFO,DRFA,console
           command:
@@ -58,7 +56,11 @@ spec:
             - /home/hadoop/scripts/entrypoint.sh
           volumeMounts:
             - name: hdfs-conf
-              mountPath: /home/hadoop/conf
+              mountPath: /home/hadoop/hadoop-current/etc/hadoop/hdfs-site.xml
+              subPath: hdfs-site.xml
+            - name: hdfs-conf
+              mountPath: /home/hadoop/hadoop-current/etc/hadoop/core-site.xml
+              subPath: core-site.xml
             - name: namenode-data
               mountPath: /data
             - name: entrypoint
@@ -67,21 +69,12 @@ spec:
         - name: hdfs-conf
           configMap:
             name: hdfs-conf
-            items:
-              - key: hdfs-site.xml
-                path: hdfs-site.xml
-              - key: core-site.xml
-                path: core-site.xml
-              - key: slaves
-                path: slaves
-              - key: log4j.properties
-                path: log4j.properties
         - name: entrypoint
           configMap:
             name: namenode-entrypoint
             items:
-                - key: entrypoint.sh
-                  path: entrypoint.sh
+              - key: entrypoint.sh
+                path: entrypoint.sh
   volumeClaimTemplates:
     - metadata:
         name: namenode-data

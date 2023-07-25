@@ -29,8 +29,6 @@ spec:
           image: hbase:latest
           imagePullPolicy: Never
           env:
-            - name: HBASE_CONF_DIR
-              value: /home/hbase/conf
             - name: HBASE_ROOT_LOGGER
               value: INFO,DRFA,console
           command:
@@ -39,22 +37,13 @@ spec:
             - start
           volumeMounts:
             - name: hbase-conf
-              mountPath: /home/hbase/conf/hbase-site.xml
+              mountPath: /home/hbase/hbase-current/conf/hbase-site.xml
               subPath: hbase-site.xml
-            - name: hbase-conf
-              mountPath: /home/hbase/conf/backup-masters
-              subPath: backup-masters
-            - name: hbase-conf
-              mountPath: /home/hbase/conf/regionservers
-              subPath: regionservers
-            - name: hbase-conf
-              mountPath: /home/hbase/conf/log4j2.properties
-              subPath: log4j2.properties
             - name: hdfs-conf
-              mountPath: /home/hbase/conf/hdfs-site.xml
+              mountPath: /home/hbase/hbase-current/conf/hdfs-site.xml
               subPath: hdfs-site.xml
             - name: hdfs-conf
-              mountPath: /home/hbase/conf/core-site.xml
+              mountPath: /home/hbase/hbase-current/conf/core-site.xml
               subPath: core-site.xml
       volumes:
         - name: hbase-conf
