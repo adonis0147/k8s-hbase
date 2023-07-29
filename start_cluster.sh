@@ -16,7 +16,7 @@ kubectl rollout status --watch --timeout=600s statefulset/nn
 kubectl apply -f hdfs/datanode.yaml
 kubectl rollout status --watch --timeout=600s statefulset/dn
 
-sleep 30s
+sleep 30
 
 while ! kubectl exec -it nn-0 -- hdfs haadmin -transitionToActive nn0; do
 	sleep 10s
@@ -25,7 +25,7 @@ done
 kubectl apply -f zookeeper/zookeeper.yaml
 kubectl rollout status --watch --timeout=600s statefulset/zk
 
-sleep 30s
+sleep 30
 
 kubectl apply -f hbase/hmaster.yaml
 kubectl rollout status --watch --timeout=600s statefulset/hm
