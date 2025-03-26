@@ -15,32 +15,32 @@ fi
 
 if [[ "${arch}" == 'x86_64' ]]; then
 	# shellcheck disable=2034
-	declare -r JAVA_URL="https://download.oracle.com/java/17/archive/jdk-17.0.8_linux-${arch/86_/}_bin.tar.gz"
+	declare -r JAVA_URL="https://download.oracle.com/java/17/archive/jdk-17.0.12_linux-${arch/86_/}_bin.tar.gz"
 	# shellcheck disable=2034
-	declare -r JAVA_SHA256SUM='74b528a33bb2dfa02b4d74a0d66c9aff52e4f52924ce23a62d7f9eb1a6744657'
+	declare -r JAVA_SHA256SUM='311f1448312ecab391fe2a1b2ac140d6e1c7aea6fbf08416b466a58874f2b40f'
 	# shellcheck disable=2034
-	declare -r HADOOP_URL='https://dlcdn.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz'
+	declare -r HADOOP_URL='https://archive.apache.org/dist/hadoop/common/hadoop-3.4.0/hadoop-3.4.0.tar.gz'
 	# shellcheck disable=2034
-	declare -r HADOOP_SHA256SUM='f5195059c0d4102adaa7fff17f7b2a85df906bcb6e19948716319f9978641a04'
+	declare -r HADOOP_SHA256SUM='e311a78480414030f9ec63549a5d685e69e26f207103d9abf21a48b9dd03c86c'
 else
 	# shellcheck disable=2034
-	declare -r JAVA_URL="https://download.oracle.com/java/17/archive/jdk-17.0.8_linux-${arch}_bin.tar.gz"
+	declare -r JAVA_URL="https://download.oracle.com/java/17/archive/jdk-17.0.12_linux-${arch}_bin.tar.gz"
 	# shellcheck disable=2034
-	declare -r JAVA_SHA256SUM=cd24d7b21ec0791c5a77dfe0d9d7836c5b1a8b4b75db7d33d253d07caa243117
+	declare -r JAVA_SHA256SUM='31c2fa06f3f98d92984a86269c71e6b9e956272084f3a1d2db6d07e6164b2f4f'
 	# shellcheck disable=2034
-	declare -r HADOOP_URL="https://dlcdn.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6-${arch}.tar.gz"
+	declare -r HADOOP_URL="https://archive.apache.org/dist/hadoop/common/hadoop-3.4.0/hadoop-3.4.0-${arch}.tar.gz"
 	# shellcheck disable=2034
-	declare -r HADOOP_SHA256SUM='e4bbf6b80ef604912f6b9bf6ca77323dee6028d08d38f36ca077df56de8a5d0d'
+	declare -r HADOOP_SHA256SUM='416c732ad372c3f03370732fd2fee48fdd69c351ceed500df4c1cef3871a164f'
 fi
 
 # shellcheck disable=2034
-declare -r ZOOKEEPER_URL='https://dlcdn.apache.org/zookeeper/zookeeper-3.7.1/apache-zookeeper-3.7.1-bin.tar.gz'
+declare -r ZOOKEEPER_URL='https://archive.apache.org/dist/zookeeper/zookeeper-3.9.3/apache-zookeeper-3.9.3-bin.tar.gz'
 # shellcheck disable=2034
-declare -r ZOOKEEPER_SHA256SUM='dedf166f9a5fb12240041385a74ec81ce9de63f2a49454883027cf6acae202a5'
+declare -r ZOOKEEPER_SHA256SUM='19aa2811d5a80c7ae36208ccd61091b5c77812e784c29ffac68b3792ab648f1c'
 # shellcheck disable=2034
-declare -r HBASE_URL='https://dlcdn.apache.org/hbase/2.5.5/hbase-2.5.5-bin.tar.gz'
+declare -r HBASE_URL='https://archive.apache.org/dist/hbase/2.6.2/hbase-2.6.2-bin.tar.gz'
 # shellcheck disable=2034
-declare -r HBASE_SHA256SUM='e67d717e96d17980f92d9afb948b9368d13fe2422a3b1f6e978e39b20d6d4df7'
+declare -r HBASE_SHA256SUM='5ff9a3993031f5a9e1d94fd795fb9ff8ee003b90570e476c63af6d3dd744a583'
 
 function download() {
 	local package
@@ -53,7 +53,9 @@ function download() {
 	local filename
 	filename="$(basename "${url}")"
 
-	if [[ ! -f "${filename}" ]] || ! echo "${checksum} ${filename}" | sha256sum --check &>/dev/null; then
+	local SHA256SUM
+	SHA256SUM="$(command -v gsha256sum || true)"
+	if [[ ! -f "${filename}" ]] || ! echo "${checksum} ${filename}" | "${SHA256SUM:-sha256sum}" --check &>/dev/null; then
 		curl -LO "${url}"
 	fi
 }
