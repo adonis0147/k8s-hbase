@@ -1,0 +1,9 @@
+[submodule "helm-hadoop"]
+	path = helm-hadoop
+	url = https://github.com/adonis0147/helm-hadoop
+[submodule "helm-zookeeper"]
+	path = helm-zookeeper
+	url = https://github.com/adonis0147/helm-zookeeper
+[submodule "helm-hbase"]
+	path = helm-hbase
+	url = https://github.com/adonis0147/helm-hbase
